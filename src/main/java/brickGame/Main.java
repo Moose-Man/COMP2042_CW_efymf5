@@ -33,7 +33,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
     private int breakHeight    = 30;
     private int halfBreakWidth = breakWidth / 2;
 
-    private int sceneWidth = 1000;
+    private int sceneWidth = 500;
     private int sceneHeigt = 700;
 
     private static int LEFT  = 1;
@@ -47,7 +47,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
     private boolean isExistHeartBlock = false;
 
     private Rectangle rect;
-    private int       ballRadius = 20;
+    private int       ballRadius = 10;
 
     private int destroyedBlockCount = 0;
 
