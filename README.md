@@ -12,18 +12,17 @@ fixed spelling errors in variable names:
 
 -renamed scenHeigt to sceneHeight
 
-changes to GameEngine class:
 
--thread variables 'updateThread', 'timethread', and 'physicsThread' have been removed
+refactored class GameEngine to no longer use threads, now uses inbuilt javaFX library function AnimationTimer to keep track of time
 
--boolean variable 'isStopped' has been removed
+Added a pause feature in class Main.java
 
--integer variable 'fps' has been removed
+refactored Block.java to take into account ball radius
 
--functions 'setFps' and 'run' have been removed
+refactored Score.java in order to no longer use threads
 
--long variable 'currTime' has been added
+refactored Main class to make collisions with bottom wall work properly (added resetCollideFlags(); to if statement where ball hits bottom wall)
 
--changed class GameEngine to no longer use threads
+
 
 
