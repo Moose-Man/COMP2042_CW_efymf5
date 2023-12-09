@@ -23,6 +23,6 @@ refactored Score.java in order to no longer use threads
 
 refactored Main class to make collisions with bottom wall work properly (added resetCollideFlags(); to if statement where ball hits bottom wall)
 
-
+refactored block class to prevent balls from bouncing in the same direction that they are already moving in 
 
 
