@@ -16,21 +16,23 @@ public class GameEngine {
     }
 
     public void start() {
-        TimeOfLastUpdate = 0;
+        System.out.println(System.nanoTime());
+        TimeOfLastUpdate = System.nanoTime();
         //isStopped = false;
         onAction.onInit();
 
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-
                 long elapsedNanoSeconds = now - TimeOfLastUpdate;
-                long elapsedMilliSeconds = (long) (elapsedNanoSeconds / 1_000_000_000.0);
+                long elapsedMilliSeconds = (long) (elapsedNanoSeconds / 1_000_000.0);
+
                 onAction.onUpdate();
                 onAction.onPhysicsUpdate();
 
                 TimeOfLastUpdate = now;
                 currTime = elapsedMilliSeconds;
+                //System.out.println(currTime);
                 onAction.onTime(currTime);
 
             }

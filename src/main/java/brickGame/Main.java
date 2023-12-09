@@ -22,7 +22,6 @@ import java.util.Random;
 
 public class Main extends Application implements EventHandler<KeyEvent>, GameEngine.OnAction {
 
-
     private int level = 0;
 
     private double xBreak = 0.0f;
@@ -49,7 +48,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
     private boolean isExistHeartBlock = false;
 
     private Rectangle rect;
-    private int ballRadius = 10;
+    private final int ballRadius = 10;
 
     private int destroyedBlockCount = 0;
 
@@ -150,7 +149,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
                 newGame.setVisible(false);
                 engine = new GameEngine();
                 engine.setOnAction(this);
-                //engine.setFps(120);
                 engine.start();
             }
 
@@ -169,7 +167,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
                 public void handle(ActionEvent event) {
                     engine = new GameEngine();
                     engine.setOnAction(Main.this);
-                    //engine.setFps(120);
                     engine.start();
 
                     load.setVisible(false);
@@ -179,7 +176,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         } else {
             engine = new GameEngine();
             engine.setOnAction(this);
-            //engine.setFps(120);
             engine.start();
             loadFromSave = false;
         }
@@ -251,8 +247,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         }
     }
 
-    float oldXBreak;
-
     private void move(final int direction) {
         new Thread(new Runnable() {
             @Override
@@ -282,8 +276,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
                 }
             }
         }).start();
-
-
     }
 
 
@@ -358,7 +350,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
             goDownBall = true;
             return;
         }
-        if (yBall >= sceneHeight) {
+        if (yBall+ballRadius >= sceneHeight) {
             goDownBall = false;
             if (!isGoldStatus) {
                 //TODO gameover
@@ -395,7 +387,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
                     //System.out.println("vX " + vX);
                 }
 
-                if (xBall - centerBreakX > 0) {
+                if (xBall+ballRadius - centerBreakX > 0) {
                     collideToBreakAndMoveToRight = true;
                 } else {
                     collideToBreakAndMoveToRight = false;
@@ -404,7 +396,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
             }
         }
 
-        if (xBall >= sceneWidth) {
+        if (xBall+ballRadius >= sceneWidth) {
             resetCollideFlags();
             //vX = 1.000;
             collideToRightWall = true;
@@ -441,7 +433,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         }
 
         if (collideToLeftBlock) {
-            goRightBall = true;
+            goRightBall = false;
         }
 
         if (collideToTopBlock) {
@@ -589,7 +581,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
             @Override
             public void run() {
                 try {
-                    vX = 1.000;
+                    vX = 2.000;
 
                     engine.stop();
                     resetCollideFlags();
@@ -666,7 +658,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
         if (yBall >= Block.getPaddingTop() && yBall <= (Block.getHeight() * (level + 1)) + Block.getPaddingTop()) {
             for (final Block block : blocks) {
-                int hitCode = block.checkHitToBlock(xBall, yBall, ballRadius+10);
+                int hitCode = block.checkHitToBlock(xBall, yBall, ballRadius);
                 if (hitCode != Block.NO_HIT) {
                     score += 1;
 
@@ -703,12 +695,16 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
                     }
 
                     if (hitCode == Block.HIT_RIGHT) {
+                        System.out.println("Collide to right block");
                         collideToRightBlock = true;
                     } else if (hitCode == Block.HIT_BOTTOM) {
+                        System.out.println("Collide to bottom block");
                         collideToBottomBlock = true;
                     } else if (hitCode == Block.HIT_LEFT) {
+                        System.out.println("Collide to left block");
                         collideToLeftBlock = true;
                     } else if (hitCode == Block.HIT_TOP) {
+                        System.out.println("Collide to top block"); //test code to view what collision type reigsters
                         collideToTopBlock = true;
                     }
 
@@ -759,6 +755,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
     @Override
     public void onTime(long time) {
-        this.time = time;
+        this.time += time;
     }
 }
