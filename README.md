@@ -21,6 +21,8 @@ refactored Block.java to take into account ball radius
 
 refactored Score.java in order to no longer use threads
 
+refactored Main class to make collisions with bottom wall work properly (added resetCollideFlags(); to if statement where ball hits bottom wall)
+
 
 
 
