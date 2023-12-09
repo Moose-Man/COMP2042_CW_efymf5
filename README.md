@@ -6,7 +6,7 @@ changes:
 
 fixed spelling errors in variable names:
 
--renamed all colides to collides
+-renamed all colides to collides\n
 -renamed all stauts to status
 -renamed scenHeigt to sceneHeight
 
