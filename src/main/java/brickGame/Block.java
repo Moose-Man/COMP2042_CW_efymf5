@@ -79,7 +79,7 @@ public class Block implements Serializable {
 
     }
 
-    public int checkHitToBlock(double xBall, double yBall, double ballRadius) {
+    public int checkHitToBlock(double xBall, double yBall, double ballRadius, double xBallDirection, double yBallDirection) {
         if (isDestroyed) {
             return NO_HIT;
         }
@@ -93,18 +93,20 @@ public class Block implements Serializable {
                 yBall + ballRadius >= blockTop && yBall - ballRadius <= blockBottom) {
             // Ball is within the bounds of the block
 
-            if (xBall + ballRadius >= blockLeft && xBall - ballRadius <= blockLeft) {
+            if (xBall + ballRadius >= blockLeft && xBall - ballRadius <= blockLeft && xBall <= blockLeft
+                    && xBallDirection == 1) {
                 // Ball hits the left side of the block
                 return HIT_LEFT;
-            } else if (xBall - ballRadius <= blockRight && xBall + ballRadius >= blockRight) {
+            } else if (xBall - ballRadius <= blockRight && xBall + ballRadius >= blockRight && xBall >= blockRight
+                            && xBallDirection == -1) {
                 // Ball hits the right side of the block
                 return HIT_RIGHT;
             }
 
-            if (yBall + ballRadius >= blockTop && yBall - ballRadius <= blockTop) {
+            if (yBall + ballRadius >= blockTop && yBall - ballRadius <= blockTop && yBallDirection == -1) {
                 // Ball hits the top side of the block
                 return HIT_TOP;
-            } else if (yBall - ballRadius <= blockBottom && yBall + ballRadius >= blockBottom) {
+            } else if (yBall - ballRadius <= blockBottom && yBall + ballRadius >= blockBottom && yBallDirection == 1) {
                 // Ball hits the bottom side of the block
                 return HIT_BOTTOM;
             }

@@ -42,6 +42,9 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
     private double xBall;
     private double yBall;
 
+    private double xBallDirection;
+    private double yBallDirection;
+
     private boolean paused = false;
 
     private boolean isGoldStatus = false;
@@ -187,9 +190,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < level + 1; j++) {
                 int r = new Random().nextInt(500);
-                if (r % 5 == 0) {
-                    continue;
-                }
                 int type;
                 if (r % 10 == 1) {
                     type = Block.BLOCK_CHOCO;
@@ -281,8 +281,8 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
     private void initBall() {
         Random random = new Random();
-        xBall = random.nextInt(sceneWidth) + 1;
-        yBall = random.nextInt(sceneHeight - 200) + ((level + 1) * Block.getHeight()) + 15;
+        xBall = 200;
+        yBall = 350;
         ball = new Circle();
         ball.setRadius(ballRadius);
         ball.setFill(new ImagePattern(new Image("ball.png")));
@@ -312,8 +312,8 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
     private boolean collideToLeftBlock          = false;
     private boolean collideToTopBlock           = false;
 
-    private double vX = 2.000;
-    private double vY = 2.000;
+    private double vX = 3.000;
+    private double vY = 3.000;
 
 
     private void resetCollideFlags() {
@@ -331,30 +331,36 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
     private void setPhysicsToBall() {
         //v = ((time - hitTime) / 1000.000) + 1.000;
-
         if (goDownBall) {
             yBall += vY;
+            yBallDirection = -1;
         } else {
             yBall -= vY;
+            yBallDirection = 1;
         }
 
         if (goRightBall) {
             xBall += vX;
+            xBallDirection = 1;
         } else {
             xBall -= vX;
+            xBallDirection = -1;
         }
 
-        if (yBall <= 0) {
+        if (yBall-ballRadius <= 0) {
             //vX = 1.000;
             resetCollideFlags();
             goDownBall = true;
             return;
         }
+
         if (yBall+ballRadius >= sceneHeight) {
             goDownBall = false;
+            resetCollideFlags();
             if (!isGoldStatus) {
-                //TODO gameover
+                //TODO game over
                 heart--;
+                System.out.println("total hearts now:"+heart);
                 new Score().show(sceneWidth / 2, sceneHeight / 2, -1, this);
 
                 if (heart == 0) {
@@ -402,7 +408,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
             collideToRightWall = true;
         }
 
-        if (xBall <= 0) {
+        if (xBall-ballRadius <= 0) {
             resetCollideFlags();
             //vX = 1.000;
             collideToLeftWall = true;
@@ -658,7 +664,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
         if (yBall >= Block.getPaddingTop() && yBall <= (Block.getHeight() * (level + 1)) + Block.getPaddingTop()) {
             for (final Block block : blocks) {
-                int hitCode = block.checkHitToBlock(xBall, yBall, ballRadius);
+                int hitCode = block.checkHitToBlock(xBall, yBall, ballRadius, xBallDirection, yBallDirection);
                 if (hitCode != Block.NO_HIT) {
                     score += 1;
 
@@ -714,6 +720,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
                 //System.out.println("Break in row:" + block.row + " and column:" + block.column + " hit");
             }
         }
+
     }
 
 
