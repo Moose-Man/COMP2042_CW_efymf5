@@ -64,8 +64,8 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
     private long goldTime = 0;
 
     private GameEngine engine;
-    public static String savePath    = "D:/save/save.mdds";
-    public static String savePathDir = "D:/save/";
+    public static String savePath    = "C:/save/save.mdds";
+    public static String savePathDir = "C:/save/";
 
     private final ArrayList<Block> blocks = new ArrayList<Block>();
     private final ArrayList<Bonus> chocos = new ArrayList<Bonus>();
@@ -99,10 +99,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
 
-//        Menu menu = new Menu(primaryStage, this);
-//        menu.show();
-
-
         if (!loadFromSave) {
             level++;
             if (level >1){
@@ -134,7 +130,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         heartLabel = new Label("Heart : " + heart);
         heartLabel.setTranslateX(sceneWidth - 70);
         if (!loadFromSave) {
-            root.getChildren().addAll(rect, ball, scoreLabel, heartLabel, levelLabel, newGame);
+            root.getChildren().addAll(rect, ball, scoreLabel, heartLabel, levelLabel, newGame, load);
         } else {
             root.getChildren().addAll(rect, ball, scoreLabel, heartLabel, levelLabel);
         }
@@ -507,7 +503,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
                     outputStream.writeObject(blockSerializables);
 
-                    new Score().showMessage("Game Saved", Main.this);
+                    Platform.runLater(() -> new Score().showMessage("Game Saved", Main.this));
 
 
                 } catch (FileNotFoundException e) {
@@ -533,7 +529,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         LoadSave loadSave = new LoadSave();
         loadSave.read();
 
-
         isExistHeartBlock = loadSave.isExistHeartBlock;
         isGoldStatus = loadSave.isGoldStatus;
         goDownBall = loadSave.goDownBall;
@@ -549,7 +544,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         level = loadSave.level;
         score = loadSave.score;
         heart = loadSave.heart;
-        destroyedBlockCount = loadSave.destroyedBlockCount;
+        destroyedBlockCount = 0;
         xBall = loadSave.xBall;
         yBall = loadSave.yBall;
         xBreak = loadSave.xBreak;
@@ -558,6 +553,11 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         time = loadSave.time;
         goldTime = loadSave.goldTime;
         vX = loadSave.vX;
+
+//        System.out.println("gold status:"+isGoldStatus+" gold time:"+goldTime+" time:"+time);
+//        System.out.println("num destroyed:"+destroyedBlockCount+" total number of blocks:"+blocks.size());
+
+
 
         blocks.clear();
         chocos.clear();
@@ -571,6 +571,10 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         try {
             loadFromSave = true;
             start(primaryStage);
+            if (isGoldStatus){
+                root.getStyleClass().add("goldRoot");
+                ball.setFill(new ImagePattern(new Image("goldball.png")));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -698,15 +702,19 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
                     if (hitCode == Block.HIT_RIGHT) {
                         System.out.println("Collide to right block");
+                        System.out.println("num destroyed:"+destroyedBlockCount+" total number of blocks:"+blocks.size());
                         collideToRightBlock = true;
                     } else if (hitCode == Block.HIT_BOTTOM) {
                         System.out.println("Collide to bottom block");
+                        System.out.println("num destroyed:"+destroyedBlockCount+" total number of blocks:"+blocks.size());
                         collideToBottomBlock = true;
                     } else if (hitCode == Block.HIT_LEFT) {
                         System.out.println("Collide to left block");
+                        System.out.println("num destroyed:"+destroyedBlockCount+" total number of blocks:"+blocks.size());
                         collideToLeftBlock = true;
                     } else if (hitCode == Block.HIT_TOP) {
                         System.out.println("Collide to top block"); //test code to view what collision type reigsters
+                        System.out.println("num destroyed:"+destroyedBlockCount+" total number of blocks:"+blocks.size());
                         collideToTopBlock = true;
                     }
 

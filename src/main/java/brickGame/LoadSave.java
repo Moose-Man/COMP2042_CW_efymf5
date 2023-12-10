@@ -1,9 +1,6 @@
 package brickGame;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.util.ArrayList;
 
 public class LoadSave {
@@ -77,6 +74,8 @@ public class LoadSave {
                 e.printStackTrace();
             }
 
+        } catch (EOFException e) {
+            System.out.println("End of file reached unexpectedly. File might be empty or corrupted.");
         } catch (IOException e) {
             e.printStackTrace();
         }

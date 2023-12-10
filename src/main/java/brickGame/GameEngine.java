@@ -16,7 +16,6 @@ public class GameEngine {
     }
 
     public void start() {
-        System.out.println(System.nanoTime());
         TimeOfLastUpdate = System.nanoTime();
         //isStopped = false;
         onAction.onInit();
