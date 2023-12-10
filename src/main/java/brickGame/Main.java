@@ -15,6 +15,9 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.animation.RotateTransition;
+import javafx.scene.transform.Rotate;
+import javafx.util.Duration;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -23,50 +26,36 @@ import java.util.Random;
 public class Main extends Application implements EventHandler<KeyEvent>, GameEngine.OnAction {
 
     private int level = 0;
-
     private double xBreak = 0.0f;
     private double centerBreakX;
     private double yBreak = 640.0f;
-
     private final int breakWidth     = 130;
     private final int breakHeight    = 30;
     private final int halfBreakWidth = breakWidth / 2;
-
     private final int sceneWidth = 500;
     private final int sceneHeight = 700;
-
     private static final int LEFT  = 1;
     private static final int RIGHT = 2;
-
     private Circle ball;
     private double xBall;
     private double yBall;
-
     private double xBallDirection;
     private double yBallDirection;
-
     private boolean paused = false;
-
     private boolean isGoldStatus = false;
     private boolean isExistHeartBlock = false;
-
     private Rectangle rect;
-    private final int ballRadius = 10;
-
+    private final int ballRadius = 15;
     private int destroyedBlockCount = 0;
-
     private final double v = 1.000;
-
     private int  heart    = 3;
     private int  score    = 0;
     private long time     = 0;
     //private long hitTime  = 0;
     private long goldTime = 0;
-
     private GameEngine engine;
     public static String savePath    = "C:/save/save.mdds";
     public static String savePathDir = "C:/save/";
-
     private final ArrayList<Block> blocks = new ArrayList<Block>();
     private final ArrayList<Bonus> chocos = new ArrayList<Bonus>();
     private final Color[]          colors = new Color[]{
@@ -284,7 +273,15 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         yBall = 350;
         ball = new Circle();
         ball.setRadius(ballRadius);
-        ball.setFill(new ImagePattern(new Image("ball.png")));
+
+        ball.setFill(new ImagePattern(new Image("shurikan.png")));
+
+        // Create a rotation animation for the ball
+        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1), ball);
+        rotateTransition.setByAngle(360); // Rotate 360 degrees
+        rotateTransition.setCycleCount(RotateTransition.INDEFINITE); // Repeat indefinitely
+        rotateTransition.setInterpolator(javafx.animation.Interpolator.LINEAR);
+        rotateTransition.play();
     }
 
     private void initBreak() {
@@ -740,7 +737,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
 
         if (time - goldTime > 5000) {
-            ball.setFill(new ImagePattern(new Image("ball.png")));
+            ball.setFill(new ImagePattern(new Image("shurikan.png")));
             root.getStyleClass().remove("goldRoot");
             isGoldStatus = false;
         }
