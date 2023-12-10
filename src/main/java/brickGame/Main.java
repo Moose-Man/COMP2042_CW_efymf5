@@ -28,15 +28,15 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
     private double centerBreakX;
     private double yBreak = 640.0f;
 
-    private int breakWidth     = 130;
-    private int breakHeight    = 30;
-    private int halfBreakWidth = breakWidth / 2;
+    private final int breakWidth     = 130;
+    private final int breakHeight    = 30;
+    private final int halfBreakWidth = breakWidth / 2;
 
     private final int sceneWidth = 500;
     private final int sceneHeight = 700;
 
-    private static int LEFT  = 1;
-    private static int RIGHT = 2;
+    private static final int LEFT  = 1;
+    private static final int RIGHT = 2;
 
     private Circle ball;
     private double xBall;
@@ -55,21 +55,21 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
     private int destroyedBlockCount = 0;
 
-    private double v = 1.000;
+    private final double v = 1.000;
 
     private int  heart    = 3;
     private int  score    = 0;
     private long time     = 0;
-    private long hitTime  = 0;
+    //private long hitTime  = 0;
     private long goldTime = 0;
 
     private GameEngine engine;
     public static String savePath    = "D:/save/save.mdds";
     public static String savePathDir = "D:/save/";
 
-    private ArrayList<Block> blocks = new ArrayList<Block>();
-    private ArrayList<Bonus> chocos = new ArrayList<Bonus>();
-    private Color[]          colors = new Color[]{
+    private final ArrayList<Block> blocks = new ArrayList<Block>();
+    private final ArrayList<Bonus> chocos = new ArrayList<Bonus>();
+    private final Color[]          colors = new Color[]{
             Color.MAGENTA,
             Color.RED,
             Color.GOLD,
@@ -99,13 +99,16 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
 
+//        Menu menu = new Menu(primaryStage, this);
+//        menu.show();
 
-        if (loadFromSave == false) {
+
+        if (!loadFromSave) {
             level++;
             if (level >1){
                 new Score().showMessage("Level Up :)", this);
             }
-            if (level == 8) {
+            if (level == 4) {
                 new Score().showWin(this);
                 return;
             }
@@ -130,7 +133,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         levelLabel.setTranslateY(20);
         heartLabel = new Label("Heart : " + heart);
         heartLabel.setTranslateX(sceneWidth - 70);
-        if (loadFromSave == false) {
+        if (!loadFromSave) {
             root.getChildren().addAll(rect, ball, scoreLabel, heartLabel, levelLabel, newGame);
         } else {
             root.getChildren().addAll(rect, ball, scoreLabel, heartLabel, levelLabel);
@@ -146,7 +149,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        if (loadFromSave == false) {
+        if (!loadFromSave) {
             if (level > 1 && level < 18) {
                 load.setVisible(false);
                 newGame.setVisible(false);
@@ -233,7 +236,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
                 saveGame();
                 break;
             case P:
-                if(paused == false) {
+                if(!paused) {
                     paused = true;
                     engine.stop();
                     break;
@@ -280,7 +283,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
 
     private void initBall() {
-        Random random = new Random();
+        //Random random = new Random();
         xBall = 200;
         yBall = 350;
         ball = new Circle();
@@ -361,7 +364,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
                 //TODO game over
                 heart--;
                 System.out.println("total hearts now:"+heart);
-                new Score().show(sceneWidth / 2, sceneHeight / 2, -1, this);
+                new Score().show((double) sceneWidth / 2, (double) sceneHeight / 2, -1, this);
 
                 if (heart == 0) {
                     new Score().showGameOver(this);
@@ -375,12 +378,12 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         if (yBall >= yBreak - ballRadius) {
             //System.out.println("Collide1");
             if (xBall >= xBreak && xBall <= xBreak + breakWidth) {
-                hitTime = time;
+                //hitTime = time;
                 resetCollideFlags();
                 collideToBreak = true;
                 goDownBall = false;
 
-                double relation = (xBall - centerBreakX) / (breakWidth / 2);
+                double relation = (xBall - centerBreakX) / ((double) breakWidth / 2);
 
                 if (Math.abs(relation) <= 0.3) {
                     //vX = 0;
@@ -393,11 +396,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
                     //System.out.println("vX " + vX);
                 }
 
-                if (xBall+ballRadius - centerBreakX > 0) {
-                    collideToBreakAndMoveToRight = true;
-                } else {
-                    collideToBreakAndMoveToRight = false;
-                }
+                collideToBreakAndMoveToRight = (xBall + ballRadius - centerBreakX > 0);
                 //System.out.println("Collide2");
             }
         }
@@ -415,11 +414,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         }
 
         if (collideToBreak) {
-            if (collideToBreakAndMoveToRight) {
-                goRightBall = true;
-            } else {
-                goRightBall = false;
-            }
+            goRightBall = collideToBreakAndMoveToRight;
         }
 
         //Wall Collide
@@ -521,6 +516,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
                     e.printStackTrace();
                 } finally {
                     try {
+                        assert outputStream != null;
                         outputStream.flush();
                         outputStream.close();
                     } catch (IOException e) {
@@ -532,7 +528,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
     }
 
-    private void loadGame() {
+    public void loadGame() {
 
         LoadSave loadSave = new LoadSave();
         loadSave.read();
@@ -597,7 +593,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
                     isExistHeartBlock = false;
 
 
-                    hitTime = 0;
+                    //hitTime = 0;
                     time = 0;
                     goldTime = 0;
 
@@ -627,7 +623,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
             isGoldStatus = false;
             isExistHeartBlock = false;
-            hitTime = 0;
+            //hitTime = 0;
             time = 0;
             goldTime = 0;
 
