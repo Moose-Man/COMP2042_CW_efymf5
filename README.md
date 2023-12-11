@@ -35,6 +35,8 @@ added Main Menu to program
 - removed previous buttons, program is totally reliant on Main Menu buttons now
 - main menu appears on program start up, with start game, load save, and exit buttons, all of which act exactly as you might think
 
+turned ball into a shuriken, and added spinning feature, making it spin instead of staying static
+
 can access main menu from loss and win screens now after refactoring Score.java to accommodate more 
 
 can restart from win screen now
