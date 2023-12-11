@@ -25,4 +25,18 @@ refactored Main class to make collisions with bottom wall work properly (added r
 
 refactored block class to prevent balls from bouncing in the same direction that they are already moving in 
 
+refactored main to make the load save button visible to the user
 
+changed save directory to my C drive, since I dont have a D drive (change if necessary for you)
+
+added load save functionality so that user can load their previous save which they make when they press S
+
+added Main Menu to program
+- removed previous buttons, program is totally reliant on Main Menu buttons now
+- main menu appears on program start up, with start game, load save, and exit buttons, all of which act exactly as you might think
+
+can access main menu from loss and win screens now after refactoring Score.java to accommodate more 
+
+can restart from win screen now
+
+buttons have all been centered whenever they appear
