@@ -5,7 +5,8 @@
 }
 
 .goldRoot {
-    -fx-background-color: #4b4a08;
+    /*-fx-background-color: #4b4a08;*/
+    -fx-background-image: url("bg.jpg");
 }
 
 .label {
