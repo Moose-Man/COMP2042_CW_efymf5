@@ -3,6 +3,9 @@ package brickGame;
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * this class reads the values from the save file
+ */
 public class LoadSave {
     public boolean          isExistHeartBlock;
     public boolean          isGoldStatus;
@@ -30,7 +33,9 @@ public class LoadSave {
     public double           vX;
     public ArrayList<BlockSerializable> blocks = new ArrayList<BlockSerializable>();
 
-
+    /**
+     * this method reads all the values from the save file and initializes the variables in Main to these values
+     */
     public void read() {
 
 

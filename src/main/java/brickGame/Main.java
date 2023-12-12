@@ -20,6 +20,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * This class manages the game loop and program initialization
+ */
 public class Main extends Application implements EventHandler<KeyEvent>, GameEngine.OnAction {
 
     public int level = 0;
@@ -80,6 +83,9 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
     private boolean menuShown = false;
 
+    /**
+     * this method initializes the program state to how it was when the program was first run
+     */
     public void initializeGame() {
         heart = 3;
         score = 0;
@@ -117,12 +123,18 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         menuShown = false;
     }
 
+    /**
+     * this method initializes and displays an instance of the main menu
+     */
     public synchronized void showMenu() {
         Menu menu = new Menu(this, primaryStage);
         menu.showMenu();
         menuShown = true;
     }
 
+    /**
+     * this method initializes the program state to what it was the last time the program state was saved
+     */
     private void loadGameState() {
 
         LoadSave loadSave = new LoadSave();
@@ -162,7 +174,12 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         }
     }
 
-
+    /**
+     * this method begins the game once run
+     * conditional statements within manage whether to initialize the program from scratch, or load from a save file
+     * @param primaryStage
+     * @throws Exception
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
@@ -176,11 +193,12 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
             level++;
 
             initBoard();
-            if (level > 1 && level != 8) {
+            if (level > 1 && level != 3) {
                 Platform.runLater(() -> new Score().showMessage("Level Up :)", this));
             }
-            if (level == 8) {
+            if (level == 3) {
                 new Score().showWin(this);
+                new Score().writeScoreToFile(score);
                 return;
             }
         }
@@ -218,6 +236,9 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         }
     }
 
+    /**
+     * this method initializes the blocks in each level
+     */
     private void initBoard() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < level + 1; j++) {
@@ -243,10 +264,18 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
     }
 
 
+    /**
+     *begins the javafx application
+     * @param args
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * manages user's controls
+     * @param event any input from the user
+     */
     @Override
     public void handle(KeyEvent event) {
         switch (event.getCode()) {
@@ -278,6 +307,10 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         }
     }
 
+    /**
+     * sets up how the paddle actually moves
+     * @param direction the user input
+     */
     private void move(final int direction) {
         new Thread(new Runnable() {
             @Override
@@ -310,6 +343,9 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
     }
 
 
+    /**
+     * initializes the ball's coordinate location, image, and spinning quality
+     */
     private void initBall() {
         //Random random = new Random();
         xBall = 200;
@@ -327,6 +363,9 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         rotateTransition.play();
     }
 
+    /**
+     * creates the paddle
+     */
     private void paddle() {
         rect = new Rectangle();
         rect.setWidth(breakWidth);
@@ -355,6 +394,9 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
     private double vY = 3.000;
 
 
+    /**
+     * on collision, resets the boolean variables keeping track of collisions to false
+     */
     private void resetCollideFlags() {
 
         collideToBreak = false;
@@ -368,6 +410,9 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         collideToTopBlock = false;
     }
 
+    /**
+     * allows ball to move and manages collision events with the ball
+     */
     private void setPhysicsToBall() {
         if (goDownBall) {
             yBall += vY;
@@ -472,13 +517,18 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
     }
 
-
+    /**
+     * compares number of destroyed blocks to the total number of blocks, and calls nextLevel() if they are equal
+     */
     private void checkDestroyedCount() {
         if (destroyedBlockCount == blocks.size()) {
             nextLevel();
         }
     }
 
+    /**
+     * saves the program state to a file
+     */
     private void saveGame() {
         new Thread(new Runnable() {
             @Override
@@ -549,8 +599,10 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
     }
 
+    /**
+     * starts the game using a previously saved program state
+     */
     public void loadGame() {
-
         loadGameState();
 
         try {
@@ -565,6 +617,9 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         }
     }
 
+    /**
+     * initializes the next level
+     */
     private void nextLevel() {
         Platform.runLater(new Runnable() {
             @Override
@@ -596,6 +651,9 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         });
     }
 
+    /**
+     * begins a new game
+     */
     public void restartGame() {
 
         try {
@@ -621,9 +679,16 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
     }
 
 
+    /**
+     * constantly monitoring the program state, and acts according to any changes
+     */
     @Override
     public void onUpdate() {
         Platform.runLater(new Runnable() {
+
+            /**
+             * constantly updates values depending on current program state
+             */
             @Override
             public void run() {
 
@@ -704,11 +769,17 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
     }
 
 
+    /**
+     *used in the GameEngine.java class
+     */
     @Override
     public void onInit() {
 
     }
 
+    /**
+     * used in the GameEngine.java class
+     */
     @Override
     public void onPhysicsUpdate() {
         checkDestroyedCount();
@@ -736,7 +807,10 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         }
     }
 
-
+    /**
+     * updates time value
+     * @param time represents time
+     */
     @Override
     public void onTime(long time) {
         this.time += time;
