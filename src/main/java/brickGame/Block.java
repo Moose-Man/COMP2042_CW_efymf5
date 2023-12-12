@@ -8,7 +8,11 @@ import javafx.scene.shape.Rectangle;
 
 import java.io.Serializable;
 
+/**
+ * this class is for generating blocks and managing block-ball collision
+ */
 public class Block implements Serializable {
+
     private static Block block = new Block(-1, -1, Color.TRANSPARENT, 99);
 
     public int row;
@@ -41,7 +45,13 @@ public class Block implements Serializable {
     public static int BLOCK_STAR = 101;
     public static int BLOCK_HEART = 102;
 
-
+    /**
+     * this method initializes the blocks and their locations in a 2d grid
+     * @param row the row of the block
+     * @param column the column of the block
+     * @param color the color f the block
+     * @param type the type of block it is
+     */
     public Block(int row, int column, Color color, int type) {
         this.row = row;
         this.column = column;
@@ -51,6 +61,9 @@ public class Block implements Serializable {
         draw();
     }
 
+    /**
+     * creates visual representation of the block grid
+     */
     private void draw() {
         x = (column * width) + paddingH;
         y = (row * height) + paddingTop;
@@ -84,6 +97,15 @@ public class Block implements Serializable {
     private double prevBlockTop;
     private double prevBlockBottom;
 
+    /**
+     * This method is used to determine if the ball hits a block, and which side of the block the ball has collided with
+     * @param xBall x coordinate of the ball
+     * @param yBall y coordinate of the ball
+     * @param ballRadius the balls raidus
+     * @param xBallDirection the x direction of the ball
+     * @param yBallDirection the y direction of the ball
+     * @return exits function with the collision type
+     */
     public int checkHitToBlock(double xBall, double yBall, double ballRadius, double xBallDirection, double yBallDirection) {
         if (isDestroyed) {
             return NO_HIT;
@@ -126,18 +148,34 @@ public class Block implements Serializable {
         return NO_HIT;
     }
 
+    /**
+     * gets the padding for the top of the block
+     * @return returns the padding for the top of the block
+     */
     public static int getPaddingTop() {
         return block.paddingTop;
     }
 
+    /**
+     * gets the horizontal padding of the block
+     * @return returns the horizontal padding of the block
+     */
     public static int getPaddingH() {
         return block.paddingH;
     }
 
+    /**
+     * gets block height
+     * @return returns block height
+     */
     public static int getHeight() {
         return block.height;
     }
 
+    /**
+     * gets block height
+     * @return returns block height
+     */
     public static int getWidth() {
         return block.width;
     }

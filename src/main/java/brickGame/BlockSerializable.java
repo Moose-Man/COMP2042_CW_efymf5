@@ -2,6 +2,9 @@ package brickGame;
 
 import java.io.Serializable;
 
+/**
+ * used in block board generation
+ */
 public class BlockSerializable implements Serializable {
     public final int row;
     public final int j;

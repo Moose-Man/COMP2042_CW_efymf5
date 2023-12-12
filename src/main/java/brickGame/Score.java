@@ -16,8 +16,16 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * this class handles code implementation for displaying messages and the buttons (image views) on winning and losing
+ * this class also contains implementation for code to write scores to a save file
+ */
 public class Score {
 
+    /**
+     * this method writes a value to a score board file
+     * @param score the value being written to the file
+     */
     public void writeScoreToFile(int score) {
         try {
             // saving score to a file
@@ -33,6 +41,14 @@ public class Score {
             e.printStackTrace();
         }
     }
+
+    /**
+     * this method displays messages briefly in the application window
+     * @param x the x coordinate of the message
+     * @param y the y coordinate of the message
+     * @param score the value of the score
+     * @param main instance of Main class
+     */
     public void show(final double x, final double y, int score, final Main main) {
         String sign;
         if (score >= 0) {
@@ -67,6 +83,11 @@ public class Score {
         timeline.play();
     }
 
+    /**
+     * shows custom message to user
+     * @param message the custom message
+     * @param main instance of Main class
+     */
     public void showMessage(String message, final Main main) {
         final Label label = new Label(message);
         label.setTranslateX(220);
@@ -95,6 +116,10 @@ public class Score {
         timeline.play();
     }
 
+    /**
+     * shows game over text and restart, back to menu, and exit buttons (image views)
+     * @param main
+     */
     public void showGameOver(final Main main) {
         Label label = new Label("Game Over :(");
         label.setTranslateX(200);
@@ -138,6 +163,10 @@ public class Score {
         main.root.getChildren().addAll(label, buttons);
     }
 
+    /**
+     * shows game win text and restart, back to menu, and exit buttons (image views)
+     * @param main instance of Main class
+     */
     public void showWin(final Main main) {
         VBox buttons = new VBox();
         buttons.setAlignment(Pos.CENTER);

@@ -13,16 +13,27 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * this class creates the main menu window and manages the events on button (image view) click
+ */
 public class Menu {
 
     private Main game;
     private Stage primaryStage;
 
+    /**
+     * creates an instance of the menu
+     * @param game
+     * @param stage
+     */
     public Menu(Main game, Stage stage) {
         this.game = game;
         this.primaryStage = stage;
     }
 
+    /**
+     * this method the menu button images and their click events, and the menu background
+     */
     public void showMenu(){
         // Create image views
         ImageView newGameImage = new ImageView(new Image("start-new-game.png"));
@@ -78,6 +89,9 @@ public class Menu {
 
     }
 
+    /**
+     * this method creates a dialogue box displaying the scores the user had on wins
+     */
     private void showScoreBoard() {
         StringBuilder scores = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader("C:/save/scores.mdds"))) {
