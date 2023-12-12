@@ -176,11 +176,12 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
             level++;
 
             initBoard();
-            if (level > 1 && level != 8) {
+            if (level > 1 && level != 2) {
                 Platform.runLater(() -> new Score().showMessage("Level Up :)", this));
             }
-            if (level == 8) {
+            if (level == 2) {
                 new Score().showWin(this);
+                new Score().writeScoreToFile(score);
                 return;
             }
         }
