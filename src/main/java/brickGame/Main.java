@@ -24,9 +24,9 @@ import java.util.Random;
 public class Main extends Application implements EventHandler<KeyEvent>, GameEngine.OnAction {
 
     public int level = 0;
-    private double xBreak = 0.0f;
+    private double xPaddle = 0.0f;
     private double centerBreakX;
-    private double yBreak = 640.0f;
+    private double yPaddle = 640.0f;
     private final int breakWidth     = 130;
     private final int breakHeight    = 30;
     private final int halfBreakWidth = breakWidth / 2;
@@ -86,8 +86,8 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         heart = 3;
         score = 0;
         level = 0;
-        xBreak = 0.0f;
-        yBreak = 640.0f;
+        xPaddle = 0.0f;
+        yPaddle = 640.0f;
         destroyedBlockCount = 0;
         centerBreakX = 0;
         xBall = 200;
@@ -109,8 +109,8 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         collideToLeftBlock = false;
         collideToTopBlock = false;
         collideToBottomBlock = false;
-        vX = 5.000;
-        vY = 5.000;
+        vX = 3.000;
+        vY = 3.000;
         resetCollideFlags();
         time = 0;
         goldTime = 0;
@@ -148,8 +148,8 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         destroyedBlockCount = 0;
         xBall = loadSave.xBall;
         yBall = loadSave.yBall;
-        xBreak = loadSave.xBreak;
-        yBreak = loadSave.yBreak;
+        xPaddle = loadSave.xBreak;
+        yPaddle = loadSave.yBreak;
         centerBreakX = loadSave.centerBreakX;
         time = loadSave.time;
         goldTime = loadSave.goldTime;
@@ -190,7 +190,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         }
 
         initBall();
-        initBreak();
+        paddle();
 
         root = new Pane();
         scoreLabel = new Label("Score: " + score);
@@ -289,18 +289,18 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
             public void run() {
                 int sleepTime = 4;
                 for (int i = 0; i < 30; i++) {
-                    if (xBreak == (sceneWidth - breakWidth) && direction == RIGHT) {
+                    if (xPaddle == (sceneWidth - breakWidth) && direction == RIGHT) {
                         return;
                     }
-                    if (xBreak == 0 && direction == LEFT) {
+                    if (xPaddle == 0 && direction == LEFT) {
                         return;
                     }
                     if (direction == RIGHT) {
-                        xBreak++;
+                        xPaddle++;
                     } else {
-                        xBreak--;
+                        xPaddle--;
                     }
-                    centerBreakX = xBreak + halfBreakWidth;
+                    centerBreakX = xPaddle + halfBreakWidth;
                     try {
                         Thread.sleep(sleepTime);
                     } catch (InterruptedException e) {
@@ -322,7 +322,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         ball = new Circle();
         ball.setRadius(ballRadius);
 
-        ball.setFill(new ImagePattern(new Image("shurikan.png")));
+        ball.setFill(new ImagePattern(new Image("shuriken.png")));
 
         // Create a rotation animation for the ball
         RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1), ball);
@@ -332,14 +332,14 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         rotateTransition.play();
     }
 
-    private void initBreak() {
+    private void paddle() {
         rect = new Rectangle();
         rect.setWidth(breakWidth);
         rect.setHeight(breakHeight);
-        rect.setX(xBreak);
-        rect.setY(yBreak);
+        rect.setX(xPaddle);
+        rect.setY(yPaddle);
 
-        ImagePattern pattern = new ImagePattern(new Image("block.jpg"));
+        ImagePattern pattern = new ImagePattern(new Image("block.png"));
 
         rect.setFill(pattern);
     }
@@ -356,8 +356,8 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
     private boolean collideToLeftBlock          = false;
     private boolean collideToTopBlock           = false;
 
-    private double vX = 5.000;
-    private double vY = 5.000;
+    private double vX = 3.000;
+    private double vY = 3.000;
 
 
     private void resetCollideFlags() {
@@ -413,12 +413,11 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
                 }
 
             }
-            //return;
         }
 
-        if (yBall >= yBreak - ballRadius) {
+        if (yBall >= yPaddle - ballRadius) {
             //System.out.println("Collide1");
-            if (xBall >= xBreak && xBall <= xBreak + breakWidth) {
+            if (xBall >= xPaddle && xBall <= xPaddle + breakWidth) {
                 //hitTime = time;
                 resetCollideFlags();
                 collideToBreak = true;
@@ -517,8 +516,8 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
                     outputStream.writeDouble(xBall);
                     outputStream.writeDouble(yBall);
-                    outputStream.writeDouble(xBreak);
-                    outputStream.writeDouble(yBreak);
+                    outputStream.writeDouble(xPaddle);
+                    outputStream.writeDouble(yPaddle);
                     outputStream.writeDouble(centerBreakX);
                     outputStream.writeLong(time);
                     outputStream.writeLong(goldTime);
@@ -578,13 +577,11 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
             start(primaryStage);
             if (isGoldStatus){
                 root.getStyleClass().add("goldRoot");
-                ball.setFill(new ImagePattern(new Image("goldball.png")));
+                ball.setFill(new ImagePattern(new Image("goldShuriken.png")));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     private void nextLevel() {
@@ -654,8 +651,8 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
                 scoreLabel.setText("Score: " + score);
                 heartLabel.setText("Heart : " + heart);
 
-                rect.setX(xBreak);
-                rect.setY(yBreak);
+                rect.setX(xPaddle);
+                rect.setY(yPaddle);
                 ball.setCenterX(xBall);
                 ball.setCenterY(yBall);
 
@@ -694,8 +691,8 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
                     if (block.type == Block.BLOCK_STAR) {
                         goldTime = time;
-                        ball.setFill(new ImagePattern(new Image("goldball.png")));
-                        System.out.println("gold ball");
+                        ball.setFill(new ImagePattern(new Image("goldShuriken.png")));
+                        System.out.println("gold shuriken");
                         root.getStyleClass().add("goldRoot");
                         isGoldStatus = true;
                     }
@@ -744,7 +741,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
 
         if (time - goldTime > 5000) {
-            ball.setFill(new ImagePattern(new Image("shurikan.png")));
+            ball.setFill(new ImagePattern(new Image("shuriken.png")));
             root.getStyleClass().remove("goldRoot");
             isGoldStatus = false;
         }
@@ -753,7 +750,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
             if (choco.y > sceneHeight || choco.taken) {
                 continue;
             }
-            if (choco.y >= yBreak && choco.y <= yBreak + breakHeight && choco.x >= xBreak && choco.x <= xBreak + breakWidth) {
+            if (choco.y >= yPaddle && choco.y <= yPaddle + breakHeight && choco.x >= xPaddle && choco.x <= xPaddle + breakWidth) {
                 System.out.println("You Got it and +3 score for you");
                 choco.taken = true;
                 choco.choco.setVisible(false);

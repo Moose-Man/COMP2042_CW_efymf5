@@ -2,11 +2,11 @@ package brickGame;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 
 public class Menu {
@@ -20,14 +20,21 @@ public class Menu {
     }
 
     public void showMenu(){
+        // Create image views
+        ImageView newGameImage = new ImageView(new Image("start-new-game.png"));
+        ImageView loadGameImage = new ImageView(new Image("LoadGame.png"));
+        ImageView exitImage = new ImageView(new Image("Exit.png"));
 
-        // Create buttons
-        Button newGameBtn = new Button("New Game");
-        Button loadGameBtn = new Button ("Load Game");
-        Button exitBtn = new Button("Exit");
+        // Set images' fit width and height
+        newGameImage.setFitWidth(300);
+        newGameImage.setFitHeight(130);
+        loadGameImage.setFitWidth(300);
+        loadGameImage.setFitHeight(130);
+        exitImage.setFitWidth(300);
+        exitImage.setFitHeight(130);
 
-        // Set button actions
-        newGameBtn.setOnAction(e -> {
+        // Set image view actions
+        newGameImage.setOnMouseClicked(e -> {
             try {
                 game.start(primaryStage);
             } catch (Exception ex) {
@@ -35,19 +42,23 @@ public class Menu {
             }
         });
 
-        loadGameBtn.setOnAction(e -> {
+        loadGameImage.setOnMouseClicked(e -> {
             game.loadGame();
         });
 
-        exitBtn.setOnAction(e -> {
+        exitImage.setOnMouseClicked(e -> {
             Platform.exit();
         });
 
         // Layout
-        VBox menuLayout = new VBox(20, newGameBtn, loadGameBtn, exitBtn);
+        VBox menuLayout = new VBox(20, newGameImage, loadGameImage, exitImage);
+        menuLayout.getStyleClass().add("vbox");
+        menuLayout.setId("menuRoot"); // set id
         menuLayout.setAlignment(Pos.CENTER);
+
         // Create scene
         Scene menuScene = new Scene(menuLayout, game.sceneWidth, game.sceneHeight);
+        menuScene.getStylesheets().add("style.css");
 
         // Show menu
         primaryStage.setScene(menuScene);

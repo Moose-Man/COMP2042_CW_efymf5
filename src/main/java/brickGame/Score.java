@@ -6,10 +6,11 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class Score {
     public void show(final double x, final double y, int score, final Main main) {
@@ -81,36 +82,38 @@ public class Score {
         label.setScaleX(2);
         label.setScaleY(2);
 
-        Button restart = new Button("Restart");
-        restart.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                main.restartGame();
-            }
+        ImageView restart = new ImageView(new Image("restart.png"));
+
+        restart.setOnMouseClicked(e -> {
+            main.restartGame();
         });
 
-        Button backToMenu = new Button("go back to main menu");
-        backToMenu.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                main.initializeGame();
-                main.showMenu();
-            }
+        ImageView backToMenu = new ImageView(new Image("BackToMenu.png"));
+        backToMenu.setOnMouseClicked(e -> {
+            main.initializeGame();
+            main.showMenu();
         });
 
-        Button exit = new Button("exit game");
+        ImageView exit = new ImageView(new Image("Exit.png"));
 
-        exit.setOnAction(e -> {
+        exit.setOnMouseClicked(e -> {
             Platform.exit();
         });
+
+        exit.setFitWidth(300);
+        exit.setFitHeight(130);
+        backToMenu.setFitWidth(300);
+        backToMenu.setFitHeight(130);
+        restart.setFitWidth(300);
+        restart.setFitHeight(130);
 
         VBox buttons = new VBox();
         buttons.setSpacing(20);
         buttons.setAlignment(Pos.CENTER);
 
         buttons.getChildren().addAll(restart, backToMenu, exit);
-        buttons.setTranslateX(main.sceneWidth/2-68 - buttons.getWidth()/2);
-        buttons.setTranslateY(main.sceneHeight/2 - buttons.getHeight()/2);
+        buttons.setTranslateX(main.sceneWidth/2-150 - buttons.getWidth()/2);
+        buttons.setTranslateY(main.sceneHeight/2-220 - buttons.getHeight()/2);
 
         main.root.getChildren().addAll(label, buttons);
     }
@@ -125,38 +128,37 @@ public class Score {
         label.setScaleX(2);
         label.setScaleY(2);
 
-        Button restart = new Button("restart");
-        restart.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                main.restartGame();
-            }
+        ImageView restart = new ImageView(new Image("restart.png"));
+
+        restart.setOnMouseClicked(e -> {
+            main.restartGame();
         });
 
-        Button backToMenu = new Button("go back to main menu");
-        backToMenu.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                main.initializeGame();
-                main.showMenu();
-            }
-
+        ImageView backToMenu = new ImageView(new Image("BackToMenu.png"));
+        backToMenu.setOnMouseClicked(e -> {
+            main.initializeGame();
+            main.showMenu();
         });
 
-        Button exit = new Button("exit game");
+        ImageView exit = new ImageView(new Image("Exit.png"));
 
-        exit.setOnAction(e -> {
+        exit.setOnMouseClicked(e -> {
             Platform.exit();
         });
 
-        //VBox buttons = new VBox(20, restart, backToMenu);
+        exit.setFitWidth(300);
+        exit.setFitHeight(130);
+        backToMenu.setFitWidth(300);
+        backToMenu.setFitHeight(130);
+        restart.setFitWidth(300);
+        restart.setFitHeight(130);
 
         buttons.setSpacing(20);
         buttons.setAlignment(Pos.CENTER);
 
         buttons.getChildren().addAll(restart, backToMenu, exit);
-        buttons.setTranslateX(main.sceneWidth/2-68 - buttons.getWidth()/2);
-        buttons.setTranslateY(main.sceneHeight/2 - buttons.getHeight()/2);
+        buttons.setTranslateX(main.sceneWidth/2-150 - buttons.getWidth()/2);
+        buttons.setTranslateY(main.sceneHeight/2-220 - buttons.getHeight()/2);
 
         main.root.getChildren().addAll(label, buttons);
     }
