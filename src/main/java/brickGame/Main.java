@@ -14,7 +14,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.animation.RotateTransition;
-//import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 
 import java.io.*;
@@ -49,7 +48,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
     public int  heart    = 3;
     public int  score    = 0;
     public long time     = 0;
-    //private long hitTime  = 0;
     public long goldTime = 0;
     private GameEngine engine;
     public static String savePath    = "C:/save/save.mdds";
@@ -72,7 +70,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
             Color.TAN,
     };
     public  Pane             root;
-    private Label            scoreLabel;
+    public Label            scoreLabel;
     private Label            heartLabel;
     private Label            levelLabel;
 
@@ -176,14 +174,12 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
         if (!loadFromSave) {
             level++;
-            System.out.println(level+"- current level!"+blocks.size());
 
             initBoard();
-            if (level > 1 && level != 3) {
+            if (level > 1 && level != 8) {
                 Platform.runLater(() -> new Score().showMessage("Level Up :)", this));
-                System.out.println("message should have shown");
             }
-            if (level == 3) {
+            if (level == 8) {
                 new Score().showWin(this);
                 return;
             }
@@ -242,7 +238,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
                     type = Block.BLOCK_NORMAL;
                 }
                 blocks.add(new Block(j, i, colors[r % (colors.length)], type));
-                //System.out.println("colors " + r % (colors.length));
             }
         }
     }
@@ -259,11 +254,9 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
                 move(LEFT);
                 break;
             case RIGHT:
-
                 move(RIGHT);
                 break;
             case DOWN:
-                //setPhysicsToBall();
                 break;
             case S:
                 saveGame();
@@ -271,10 +264,12 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
             case P:
                 if(!paused) {
                     paused = true;
+                    System.out.println("paused");
                     engine.stop();
                     break;
                 } else {
                     paused = false;
+                    System.out.println("unpaused");
                     engine.start();
                     break;
                 }
@@ -327,7 +322,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         // Create a rotation animation for the ball
         RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1), ball);
         rotateTransition.setByAngle(360); // Rotate 360 degrees
-        rotateTransition.setCycleCount(RotateTransition.INDEFINITE); // Repeat indefinitely
+        rotateTransition.setCycleCount(RotateTransition.INDEFINITE);
         rotateTransition.setInterpolator(javafx.animation.Interpolator.LINEAR);
         rotateTransition.play();
     }
@@ -374,7 +369,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
     }
 
     private void setPhysicsToBall() {
-        //v = ((time - hitTime) / 1000.000) + 1.000;
         if (goDownBall) {
             yBall += vY;
             yBallDirection = -1;
@@ -392,7 +386,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         }
 
         if (yBall-ballRadius <= 0) {
-            //vX = 1.000;
             resetCollideFlags();
             goDownBall = true;
             return;
@@ -402,7 +395,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
             goDownBall = false;
             resetCollideFlags();
             if (!isGoldStatus) {
-                //TODO game over
                 heart--;
                 System.out.println("total hearts now:"+heart);
                 new Score().show((double) sceneWidth / 2, (double) sceneHeight / 2, -1, this);
@@ -416,9 +408,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
         }
 
         if (yBall >= yPaddle - ballRadius) {
-            //System.out.println("Collide1");
             if (xBall >= xPaddle && xBall <= xPaddle + breakWidth) {
-                //hitTime = time;
                 resetCollideFlags();
                 collideToBreak = true;
                 goDownBall = false;
@@ -426,30 +416,24 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
                 double relation = (xBall - centerBreakX) / ((double) breakWidth / 2);
 
                 if (Math.abs(relation) <= 0.3) {
-                    //vX = 0;
                     vX = Math.abs(relation);
                 } else if (Math.abs(relation) > 0.3 && Math.abs(relation) <= 0.7) {
                     vX = (Math.abs(relation) * 1.5) + (level / 3.500);
-                    //System.out.println("vX " + vX);
                 } else {
                     vX = (Math.abs(relation) * 2) + (level / 3.500);
-                    //System.out.println("vX " + vX);
                 }
 
                 collideToBreakAndMoveToRight = (xBall + ballRadius - centerBreakX > 0);
-                //System.out.println("Collide2");
             }
         }
 
         if (xBall+ballRadius >= sceneWidth) {
             resetCollideFlags();
-            //vX = 1.000;
             collideToRightWall = true;
         }
 
         if (xBall-ballRadius <= 0) {
             resetCollideFlags();
-            //vX = 1.000;
             collideToLeftWall = true;
         }
 
@@ -491,9 +475,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
     private void checkDestroyedCount() {
         if (destroyedBlockCount == blocks.size()) {
-            //TODO win level todo...
-            //System.out.println("You Win");
-
             nextLevel();
         }
     }
@@ -599,7 +580,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
                     isExistHeartBlock = false;
 
 
-                    //hitTime = 0;
                     time = 0;
                     goldTime = 0;
 
@@ -628,7 +608,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
             isGoldStatus = false;
             isExistHeartBlock = false;
-            //hitTime = 0;
             time = 0;
             goldTime = 0;
 
@@ -674,7 +653,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
                     block.rect.setVisible(false);
                     block.isDestroyed = true;
                     destroyedBlockCount++;
-                    //System.out.println("size is " + blocks.size());
                     resetCollideFlags();
 
                     if (block.type == Block.BLOCK_CHOCO) {
@@ -703,26 +681,23 @@ public class Main extends Application implements EventHandler<KeyEvent>, GameEng
 
                     if (hitCode == Block.HIT_RIGHT) {
                         System.out.println("Collide to right block");
-                        System.out.println("num destroyed:"+destroyedBlockCount+" total number of blocks:"+blocks.size());
+                        System.out.println("Break in row:" + block.row + " and column:" + block.column + " hit");
                         collideToRightBlock = true;
                     } else if (hitCode == Block.HIT_BOTTOM) {
                         System.out.println("Collide to bottom block");
-                        System.out.println("num destroyed:"+destroyedBlockCount+" total number of blocks:"+blocks.size());
+                        System.out.println("Break in row:" + block.row + " and column:" + block.column + " hit");
                         collideToBottomBlock = true;
                     } else if (hitCode == Block.HIT_LEFT) {
                         System.out.println("Collide to left block");
-                        System.out.println("num destroyed:"+destroyedBlockCount+" total number of blocks:"+blocks.size());
+                        System.out.println("Break in row:" + block.row + " and column:" + block.column + " hit");
                         collideToLeftBlock = true;
                     } else if (hitCode == Block.HIT_TOP) {
-                        System.out.println("Collide to top block"); //test code to view what collision type reigsters
-                        System.out.println("num destroyed:"+destroyedBlockCount+" total number of blocks:"+blocks.size());
+                        System.out.println("Collide to top block"); //test code to view what collision type is done
+                        System.out.println("Break in row:" + block.row + " and column:" + block.column + " hit");
                         collideToTopBlock = true;
                     }
 
                 }
-
-                //TODO hit to break and some work here....
-                //System.out.println("Break in row:" + block.row + " and column:" + block.column + " hit");
             }
         }
 

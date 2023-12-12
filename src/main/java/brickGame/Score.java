@@ -11,8 +11,28 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Score {
+
+    public void writeScoreToFile(int score) {
+        try {
+            // saving score to a file
+            new File(Main.savePathDir).mkdirs();
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter("C:/save/scores.mdds", true));
+
+            writer.write(Integer.toString(score));
+            writer.newLine();  // Add a newline for each score
+
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void show(final double x, final double y, int score, final Main main) {
         String sign;
         if (score >= 0) {

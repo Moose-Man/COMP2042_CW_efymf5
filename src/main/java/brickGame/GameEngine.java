@@ -5,7 +5,6 @@ import javafx.animation.AnimationTimer;
 public class GameEngine {
 
     private long currTime = 0;
-    //private boolean isStopped = true;
     private OnAction onAction;
     private AnimationTimer timer;
     private long TimeOfLastUpdate = 0;
@@ -17,7 +16,6 @@ public class GameEngine {
 
     public void start() {
         TimeOfLastUpdate = System.nanoTime();
-        //isStopped = false;
         onAction.onInit();
 
         timer = new AnimationTimer() {
@@ -31,7 +29,6 @@ public class GameEngine {
 
                 TimeOfLastUpdate = now;
                 currTime = elapsedMilliSeconds;
-                //System.out.println(currTime);
                 onAction.onTime(currTime);
 
             }
@@ -40,7 +37,6 @@ public class GameEngine {
     }
 
     public void stop() {
-        //isStopped = true;
         timer.stop();
     }
 
