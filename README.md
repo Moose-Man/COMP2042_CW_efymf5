@@ -2,7 +2,13 @@
 
 Compilation Instructions
 -
-1. 
+- these assume intellij usage
+1. Extract the project from the zip file
+2. Open a new project
+3. delete the main folder of the new project
+4. replace it with the main file from my project
+5. install the javafx library
+6. and you should be good to go!
 
 
 
