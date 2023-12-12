@@ -5,7 +5,6 @@ import javafx.animation.AnimationTimer;
 public class GameEngine {
 
     private long currTime = 0;
-    //private boolean isStopped = true;
     private OnAction onAction;
     private AnimationTimer timer;
     private long TimeOfLastUpdate = 0;
@@ -16,16 +15,15 @@ public class GameEngine {
     }
 
     public void start() {
-        TimeOfLastUpdate = 0;
-        //isStopped = false;
+        TimeOfLastUpdate = System.nanoTime();
         onAction.onInit();
 
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-
                 long elapsedNanoSeconds = now - TimeOfLastUpdate;
-                long elapsedMilliSeconds = (long) (elapsedNanoSeconds / 1_000_000_000.0);
+                long elapsedMilliSeconds = (long) (elapsedNanoSeconds / 1_000_000.0);
+
                 onAction.onUpdate();
                 onAction.onPhysicsUpdate();
 
@@ -39,7 +37,6 @@ public class GameEngine {
     }
 
     public void stop() {
-        //isStopped = true;
         timer.stop();
     }
 
