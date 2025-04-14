@@ -1,5 +1,9 @@
 # COMP2042_CW_efymf5
 
+**Project Description**
+-
+Faulty, messy Java code was provided for a brick breaker game coded in Java using the JavaFX library. The end goal of the project was the refurbishing and overall improvement of the state of the game. This includes improving performance, solving errors, cleaning up the code for easier maintenance in the future, etc.
+
 Compilation Instructions
 -
 - these assume intellij usage
